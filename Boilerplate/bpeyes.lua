@@ -54,8 +54,17 @@ function bpeyes:newEye(modelPart)
 		travel.downwards = downwards or travel.downwards
 		return travel
 	end
-
+	function self:travel(outwards, inwards, upwards, downwards) --alias
+		return self:setTravel(outwards, inwards, upwards, downwards)
+	end
 	function self:getTravel() return travel end
+
+	function self:setLeft(b)
+		isLeft = b
+		return isLeft
+	end
+	function self:left(b) return self:setLeft(b) end --alias
+	function self:getLeft() return isLeft end
 
 	table.insert(bpeyes.instances, self)
 	return self
@@ -72,3 +81,4 @@ end
 
 
 return bpeyes
+

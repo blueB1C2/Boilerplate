@@ -47,4 +47,5 @@ local mainMenu = {
 }
 
 -- Actually constructs the menu system
+require("boilerplate")
 bpas = bpactions:build(mainMenu)

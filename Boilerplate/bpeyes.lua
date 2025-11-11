@@ -48,10 +48,10 @@ function bpeyes:newEye(modelPart)
 	end
 
 	function self:setTravel(outwards, inwards, upwards, downwards)
-		travel.outwards = outwards
-		travel.inwards = inwards
-		travel.upwards = upwards
-		travel.downwards = downwards
+		travel.outwards = outwards or travel.outwards
+		travel.inwards = inwards or travel.inwards
+		travel.upwards = upwards or travel.upwards
+		travel.downwards = downwards or travel.downwards
 		return travel
 	end
 
@@ -69,5 +69,6 @@ end
 function bpeyes:render(dt, _)
 	self.updatePos(dt)
 end
+
 
 return bpeyes

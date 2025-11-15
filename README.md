@@ -76,7 +76,7 @@ I've hinted at blinking enough, so here's an easily pastable snippet which plays
 ```lua
 bprandfunc:new(
 	function() animations.model.blink:play() end,  -- task
-    nil, nil,                                          -- default minTicks and maxTicks
+    nil, nil,                                      -- default minTicks and maxTicks
 	function() animations.model.blink:stop() end   -- contingency anim stop
 ):setExecuteOnSleep(false)
 ```

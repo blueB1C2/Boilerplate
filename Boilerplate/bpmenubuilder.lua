@@ -1,21 +1,23 @@
 bpactions = {}
 bpactions.__index = bpactions
 
-function bpactions:build(structure, menu)
+function bpactions:build(structure, menu) -- structure is the table, menu is for recursive calling
 	self = setmetatable({}, bpactions)
-	self.menu = menu or bpactions.menu:new("Main")
+	self.menu = menu or bpactions.menu:new("Main") -- creates new menu/sub-menu
 
 	local childMenu = self.menu:addChildPage(structure)
-	if structure.contains == nil then return end
-	for i = 1,#structure.contains do
+	
+	if structure.contains == nil then return end -- end of the tree branch
+	for i = 1, #structure.contains do -- iterates through what the node contains
 		local subStruct = structure.contains[i]
 		if type(subStruct) == "Action" then
-			childMenu:addAction(subStruct)
+			childMenu:addAction(subStruct) -- handles actions
 		else
-			bpactions:build(subStruct, childMenu)
+			bpactions:build(subStruct, childMenu) -- recursive call to go deeper in the tree
 		end
 	end
-	action_wheel:setPage(self.menu.page)
+	
+	action_wheel:setPage(self.menu.page) -- at the end of execution this will end up being the main page
 	return self
 end
 
@@ -29,21 +31,21 @@ function bpactions.menu:new(name)
 	self.parent = {}
 	self.children = {}
 
-	function self:addChildPage(struct)
-		local params = struct.params
-		if params == nil or next(params) == nil then return self end
-		local page = bpactions.menu:new(struct.name or params.title)
-		table.insert(self.children, page)
+	function self:addChildPage(struct) -- adds a child page (sub-menu) to this page
+		local params = struct.params 	-- extracts params from the table entry
+		if params == nil or next(params) == nil then return self end -- detects if node is main node
+		local page = bpactions.menu:new(struct.name or params.title) -- creates new sub-menu page
+		table.insert(self.children, page)	-- adds new page to a list of its children
 		page.parent = self
 
-		local goToPage = action_wheel:newAction()
-			:title(params.title or "Title T")
+		local goToPage = action_wheel:newAction() -- action for navigating to the new child page
+			:title(params.title or "Title T") -- AGGA
 			:item(params.item or nil)
 			:hoverItem(params.hoverItem or params.item or nil)
 			:color(params.color or vec(0,0,0))
 			:hoverColor(params.hoverColor)
 			:onLeftClick(function() action_wheel:setPage(page.page) end)
-		local goBack = action_wheel:newAction()
+		local goBack = action_wheel:newAction() -- back button on child page
 			:title("Back")
 			:item("minecraft:barrier")
 			:color(1,0,0)
@@ -56,8 +58,8 @@ function bpactions.menu:new(name)
 	end
 
 	function self:addAction(action)
-		self.page:setAction(-1, action)
-		self.rotateActions()
+		self.page:setAction(-1, action) -- puts new action in the last slot
+		self.rotateActions() -- circular shift actions on page so back button is always top left
 		return action
 	end
 
@@ -77,10 +79,9 @@ function cyclic_table_shift(tab, shift)
     local len = #tab
     local shifted = {}
     for i = 1, len do
-        -- Calculate the new index with wraparound
-        -- (i - 1 - shift) % len ensures the index wraps correctly,
-        -- and adding 1 converts it back to 1-based indexing.
-        shifted[i] = tab[(i - 1 - shift) % len + 1]
+        shifted[i] = tab[(i - 1 - shift) % len + 1] -- calculates new index w/ wraparound
+        -- (i - 1 - shift) % len  converts to 0-based index and wraps
+        -- adding 1 converts it back to 1-based indexing, thx lua :^)
     end
     return shifted
 end

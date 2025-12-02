@@ -95,3 +95,23 @@ local earTwitchL = bprandfunc:new(
 	100, 700)
   ```
 </details>
+
+# BPMenuStructure & BPActionWheelDef
+A way to program a menu system in the action wheel using a nested array instead of manually making pages and links between them. 
+
+At the top of the file is where you define your actions. As is, there's a blank action that exists only to put a spacer in the action wheel.
+
+The menu is constructed like a tree, with the main page as the root of the tree with sub-menu pages branching out. Each page has three attributes:
+* `name = ""`
+	* The name of the page (optional)
+* `params = {}`
+	* Leave blank for the main page
+	* This sets the appearance of the action that goes to this page which resides in the page above this one
+	* `title, item, hoverItem, color, hoverColor`
+* `contains = {}`
+	* Sub-menu pages or actions on this page
+	* Actions are slotted in counterclockwise from top left, in the order they are entered.
+	* They can also be numbered to easily change order. Use indices `[1]`, `[2]`, `[3]`, etc.
+
+There is a small example in the script itself. Feel free to play around with it.
+At the end of the ActionWheelDef file, it simply calls BPMenuStructure to build the menu and set the main page as active.

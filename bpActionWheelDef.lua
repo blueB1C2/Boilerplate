@@ -17,6 +17,9 @@ local blank = action_wheel:newAction()
 		contains = {act1 = action1}	is not fine
 
 example:
+local action1 = action_wheel:newAction():item("iron_ingot")
+local action2 = action_wheel:newAction():item("gold_ingot")
+local action3 = action_wheel:newAction():item("netherite_ingot")
 node = {
 	name = "homepage",
 	params = {}, -- leave this blank for the home page

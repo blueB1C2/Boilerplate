@@ -7,9 +7,9 @@ function bpeyes:newEye(modelPart)
 	local self = setmetatable({}, {__index = bpeyes})
 
 	local eyePart = modelPart
-	local isLeft = (modelPart:getTruePivot().x < 0)
+	local isLeft = (modelPart:getTruePivot().x < 0) -- checks if the eye's pivot is on the -x side of the model
 
-	local travel = {}
+	local travel = {} -- defaults for two pixel tall eyes
 	travel.outwards = 0.5
 	travel.inwards = 0.0
 	travel.upwards = 0.25
@@ -17,12 +17,12 @@ function bpeyes:newEye(modelPart)
 
 	local pos = vec(0,0)
 
-	local function getHeadRot()
+	local function getHeadRot() -- missed opportunity to call this getBrainRot
 		local rot = vanilla_model.HEAD:getOriginRot()
-		return vec(rot.x, rot.y)
+		return vec(rot.x, rot.y) -- returns azimuth and attitude
 	end
 
-	function self.mapHeadRot()
+	function self.mapHeadRot() -- maps degrees of headRot to blockbench units
 		local headRot = getHeadRot()
 		if isLeft then
 			pos = vec(
@@ -37,7 +37,7 @@ function bpeyes:newEye(modelPart)
 		end
 	end
 
-	function self.updatePos(dt)
+	function self.updatePos(dt) -- updates visual position in render
 		local current = {}
 		current = eyePart:getPos()
 		eyePart:setPos(
@@ -47,7 +47,7 @@ function bpeyes:newEye(modelPart)
 			)
 	end
 
-	function self:setTravel(outwards, inwards, upwards, downwards)
+	function self:setTravel(outwards, inwards, upwards, downwards) -- sets custom eye travel limits
 		travel.outwards = outwards or travel.outwards
 		travel.inwards = inwards or travel.inwards
 		travel.upwards = upwards or travel.upwards
@@ -57,20 +57,19 @@ function bpeyes:newEye(modelPart)
 	function self:travel(outwards, inwards, upwards, downwards) --alias
 		return self:setTravel(outwards, inwards, upwards, downwards)
 	end
-	function self:getTravel() return travel end
+	function self:getTravel() return travel end -- if for some reason you need to retrieve it
 
-	function self:setLeft(b)
+	function self:setLeft(b) -- sets handedness if you don't want that happening automatically
 		isLeft = b
 		return isLeft
 	end
 	function self:left(b) return self:setLeft(b) end --alias
-	function self:getLeft() return isLeft end
+	function self:getLeft() return isLeft end -- if for some reason you need to retrieve it
 
-	table.insert(bpeyes.instances, self)
+	table.insert(bpeyes.instances, self) -- makes a new instance to run on tick and render
 	return self
 end
 
---tick event, called 20 times per second
 function bpeyes:tick()
 	self.mapHeadRot()
 end
@@ -79,6 +78,4 @@ function bpeyes:render(dt, _)
 	self.updatePos(dt)
 end
 
-
 return bpeyes
-

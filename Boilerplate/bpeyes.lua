@@ -26,12 +26,12 @@ function bpeyes:newEye(modelPart)
 		local headRot = getHeadRot()
 		if isLeft then
 			pos = vec(
-				math.map(headRot.y, -50, 50, travel.inwards, -travel.outwards), 
+				math.map(((headRot.y - 180) % 360) - 180, -50, 50, travel.inwards, -travel.outwards), 
 				math.map(headRot.x, -90, 90, -travel.downwards, travel.upwards)
 				)
 		else
 			pos = vec(
-				math.map(headRot.y, -50, 50, travel.outwards, -travel.inwards), 
+				math.map(((headRot.y - 180) % 360) - 180, -50, 50, travel.outwards, -travel.inwards), 
 				math.map(headRot.x, -90, 90, -travel.downwards, travel.upwards)
 				)
 		end

@@ -25,7 +25,8 @@ local libraries = {
 	"bpeyes", 
 	"bphys", 
 	"bpmenubuilder", 
-	"bprandfunc"
+	"bprandfunc",
+	"bpcheckid"
 }
 -- we don't talk about bphys
 
